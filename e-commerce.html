@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Leafy – Plant Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F8F4;--card:#fff;--ink:#14201F;--mute:#5b6b69;--brand:#0F3D3E;--onbrand:#fff;--accent:#F2B632;--line:#dfe7e2;--ok:#1f8a5b;--bad:#c0392b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1716;--card:#14211f;--ink:#eaf2ef;--mute:#9fb3ae;--brand:#7fd1b9;--onbrand:#0d1716;--line:#243633}}
+:root[data-theme="dark"]{--bg:#0d1716;--card:#14211f;--ink:#eaf2ef;--mute:#9fb3ae;--brand:#7fd1b9;--onbrand:#0d1716;--line:#243633}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 'DM Sans',system-ui,sans-serif}
+h1,h2,h3,.logo{font-family:'Bricolage Grotesque','DM Sans',sans-serif;margin:0}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:12px 18px}
+.logo{font-size:24px;font-weight:800;color:var(--brand);margin-right:auto}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+.nb{background:none;border:0;padding:8px 12px;border-radius:99px;font-weight:500}
+.nb.on,.nb:hover{background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+.btn{background:var(--brand);color:var(--onbrand);border:0;border-radius:10px;padding:10px 16px;font-weight:700}
+.btn.alt{background:none;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn.sm{padding:6px 10px;font-size:14px}.btn.red{background:var(--bad);color:#fff}
+.cartb{position:relative}
+.cartb b{position:absolute;top:-6px;right:-6px;background:var(--accent);color:#14201F;border-radius:99px;font-size:12px;min-width:20px;height:20px;display:grid;place-items:center}
+main{max-width:1050px;margin:0 auto;padding:18px}
+.hero{background:var(--brand);color:var(--onbrand);border-radius:22px;padding:34px 26px;margin-bottom:22px;position:relative;overflow:hidden}
+.hero h1{font-size:clamp(32px,7vw,56px);line-height:1.02;font-weight:800;max-width:11em}
+.hero p{max-width:30em;opacity:.9;margin:12px 0 0}
+.hero .pl{position:absolute;right:14px;bottom:-14px;font-size:clamp(90px,22vw,170px);line-height:1}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+input,select{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+.tools input{flex:1;min-width:180px;width:auto}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:6px 14px}
+.chip.on{background:var(--accent);color:#14201F;border-color:var(--accent);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.pic{height:130px;display:grid;place-items:center;font-size:64px}
+.card .in{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.card h3{font-size:18px}.mute{color:var(--mute);font-size:14px}
+.price{font-weight:700;font-size:18px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;padding-top:8px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
+.stats div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.stats b{display:block;font:800 26px 'Bricolage Grotesque',sans-serif}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;align-items:end}
+label{font-size:13px;color:var(--mute);display:block}
+.track{display:flex;gap:4px;margin:10px 0}
+.track span{flex:1;text-align:center;font-size:12px;padding-top:8px;border-top:5px solid var(--line);color:var(--mute)}
+.track span.d{border-color:var(--ok);color:var(--ink);font-weight:700}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:20;justify-content:center;align-items:center;padding:16px}
+#ov.show{display:flex}
+#ov.side{justify-content:flex-end;padding:0;align-items:stretch}
+.box{background:var(--bg);border-radius:18px;padding:20px;width:100%;max-width:440px;max-height:92vh;overflow:auto}
+.side .box{border-radius:0;max-height:none;height:100%}
+.box h2{margin-bottom:12px}
+.box .f{display:grid;gap:10px}
+.line{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.line .e{font-size:30px}.line .t{flex:1}
+.qty button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--card)}
+.err{color:var(--bad);font-size:14px;min-height:20px}
+.hint{background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:8px 10px;font-size:13px;color:var(--mute)}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;z-index:30;display:none}
+.empty{text-align:center;padding:40px 10px;color:var(--mute)}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">🌿 Leafy</div>
+<nav id="nav"></nav>
+</header>
+<main id="app"></main>
+<div id="ov"><div class="box" id="box"></div></div>
+<div id="toast" role="status"></div>
+<script>
+// ---------- "Database" (browser storage with in-memory fallback) ----------
+const mem={};
+const db={
+ get(k,d){try{const v=localStorage.getItem('leafy:'+k);return v==null?(k in mem?mem[k]:d):JSON.parse(v)}catch(e){return k in mem?mem[k]:d}},
+ set(k,v){mem[k]=v;try{localStorage.setItem('leafy:'+k,JSON.stringify(v))}catch(e){}}
+};
+const SEED=[
+ {id:1,name:'Monstera',price:799,cat:'Indoor',emoji:'🪴',stock:12,bg:'#d7efe0'},
+ {id:2,name:'Snake Plant',price:449,cat:'Indoor',emoji:'🌿',stock:20,bg:'#e3efc9'},
+ {id:3,name:'Cactus Trio',price:349,cat:'Succulents',emoji:'🌵',stock:15,bg:'#fbe7b8'},
+ {id:4,name:'Money Plant',price:299,cat:'Indoor',emoji:'🍀',stock:25,bg:'#cdeedd'},
+ {id:5,name:'Bonsai Ficus',price:1499,cat:'Outdoor',emoji:'🌳',stock:5,bg:'#d9e8cf'},
+ {id:6,name:'Tulip Bulbs',price:399,cat:'Flowering',emoji:'🌷',stock:18,bg:'#fbd5de'},
+ {id:7,name:'Sunflower Kit',price:249,cat:'Flowering',emoji:'🌻',stock:30,bg:'#fdeaa8'},
+ {id:8,name:'Aloe Vera',price:279,cat:'Succulents',emoji:'🌱',stock:22,bg:'#d3f0d8'},
+ {id:9,name:'Clay Pot Set',price:599,cat:'Pots',emoji:'🏺',stock:10,bg:'#f3d9c4'},
+ {id:10,name:'Rose Bush',price:549,cat:'Flowering',emoji:'🌹',stock:8,bg:'#f8cfd0'},
+ {id:11,name:'Palm Tree',price:1299,cat:'Outdoor',emoji:'🌴',stock:4,bg:'#cfeadf'},
+ {id:12,name:'Herb Garden',price:499,cat:'Outdoor',emoji:'🌾',stock:14,bg:'#e6edc3'}
+];
+const SEED_USERS=[
+ {id:1,name:'Store Admin',email:'admin@leafy.com',pw:'admin123',role:'admin'},
+ {id:2,name:'Demo User',email:'user@leafy.com',pw:'user123',role:'user'}
+];
+const STEPS=['Placed','Packed','Shipped','Delivered'];
+
+// ---------- Backend API layer (simulated, with role checks) ----------
+const API={
+ login(e,p){const u=db.get('users',SEED_USERS).find(x=>x.email===e.trim().toLowerCase()&&x.pw===p);if(!u)throw Error('Wrong email or password.');return{id:u.id,name:u.name,email:u.email,role:u.role}},
+ register(n,e,p){e=e.trim().toLowerCase();const us=db.get('users',SEED_USERS);if(!n.trim()||!e.includes('@')||p.length<4)throw Error('Enter a name, a valid email and a password of 4+ characters.');if(us.some(x=>x.email===e))throw Error('That email already has an account.');const u={id:Date.now(),name:n.trim(),email:e,pw:p,role:'user'};us.push(u);db.set('users',us);return{id:u.id,name:u.name,email:u.email,role:'user'}},
+ products(){return db.get('products',SEED)},
+ admin(u){if(!u||u.role!=='admin')throw Error('Admins only.')},
+ saveProduct(u,p){this.admin(u);const ps=this.products();if(p.id){const i=ps.findIndex(x=>x.id===p.id);ps[i]={...ps[i],...p}}else ps.push({...p,id:Date.now(),bg:'#d7efe0'});db.set('products',ps)},
+ deleteProduct(u,id){this.admin(u);db.set('products',this.products().filter(x=>x.id!==id))},
+ orders(u){const o=db.get('orders',[]);return u.role==='admin'?o:o.filter(x=>x.uid===u.id)},
+ placeOrder(u,cart,info){if(!u)throw Error('Please log in to check out.');const ps=this.products();
+  for(const c of cart){const p=ps.find(x=>x.id===c.id);if(!p||p.stock<c.q)throw Error((p?p.name:'An item')+' is out of stock.')}
+  const items=cart.map(c=>{const p=ps.find(x=>x.id===c.id);p.stock-=c.q;return{id:p.id,name:p.name,emoji:p.emoji,price:p.price,q:c.q}});
+  db.set('products',ps);
+  const o={id:'LF'+Math.floor(Date.now()/1000).toString().slice(-6),uid:u.id,user:u.name,items,total:items.reduce((s,i)=>s+i.price*i.q,0),info,status:0,date:new Date().toLocaleDateString()};
+  const all=db.get('orders',[]);all.unshift(o);db.set('orders',all);return o},
+ setStatus(u,id,s){this.admin(u);const all=db.get('orders',[]);all.find(x=>x.id===id).status=+s;db.set('orders',all)}
+};
+
+// ---------- App state ----------
+const S={user:db.get('session',null),cart:db.get('cart',[]),view:'shop',q:'',cat:'All'};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+n.toLocaleString('en-IN');
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',2200)}
+function modal(h,side){$('#box').innerHTML=h;$('#ov').className='show'+(side?' side':'')}
+function closeM(){$('#ov').className=''}
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov')closeM()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+function go(v){S.view=v;render()}
+const cartCount=()=>S.cart.reduce((s,c)=>s+c.q,0);
+function saveCart(){db.set('cart',S.cart)}
+
+// ---------- Rendering ----------
+function render(){
+ const u=S.user;
+ if(S.view==='admin'&&(!u||u.role!=='admin'))S.view='shop';
+ if(S.view==='orders'&&!u)S.view='shop';
+ $('#nav').innerHTML=
+  `<button class="nb ${S.view==='shop'?'on':''}" onclick="go('shop')">Shop</button>`+
+  (u?`<button class="nb ${S.view==='orders'?'on':''}" onclick="go('orders')">${u.role==='admin'?'All orders':'My orders'}</button>`:'')+
+  (u&&u.role==='admin'?`<button class="nb ${S.view==='admin'?'on':''}" onclick="go('admin')">Admin</button>`:'')+
+  (u?`<button class="nb" onclick="logout()">Log out (${esc(u.name.split(' ')[0])})</button>`:`<button class="nb" onclick="authM()">Log in</button>`)+
+  `<button class="btn cartb" onclick="cartM()" aria-label="Open cart">Cart${cartCount()?`<b>${cartCount()}</b>`:''}</button>`;
+ $('#app').innerHTML=S.view==='shop'?shop():S.view==='orders'?orders():admin();
+}
+function shop(){
+ const ps=API.products(),cats=['All',...new Set(ps.map(p=>p.cat))];
+ const list=ps.filter(p=>(S.cat==='All'||p.cat===S.cat)&&p.name.toLowerCase().includes(S.q.toLowerCase()));
+ return `<section class="hero"><h1>Green things, delivered to your door.</h1><p>Pick a plant, check out in a minute, and follow your order from packed to delivered.</p><div class="pl" aria-hidden="true">🪴</div></section>
+ <div class="tools"><input id="q" type="search" placeholder="Search plants and pots" value="${esc(S.q)}" oninput="S.q=this.value;keepSearch()" aria-label="Search products"></div>
+ <div class="chips" style="margin-bottom:16px">${cats.map(c=>`<button class="chip ${S.cat===c?'on':''}" onclick="S.cat='${c}';render()">${c}</button>`).join('')}</div>
+ <div class="grid">${list.map(p=>`<article class="card"><div class="pic" style="background:${p.bg}" aria-hidden="true">${p.emoji}</div><div class="in"><h3>${esc(p.name)}</h3><span class="mute">${esc(p.cat)} · ${p.stock>0?p.stock+' in stock':'Sold out'}</span><div class="row"><span class="price">${inr(p.price)}</span><button class="btn sm" ${p.stock<1?'disabled':''} onclick="add(${p.id})">Add to cart</button></div></div></article>`).join('')||'<p class="empty">No products match your search.</p>'}</div>`;
+}
+function keepSearch(){const i=$('#q'),pos=i.selectionStart;render();const n=$('#q');n.focus();n.setSelectionRange(pos,pos)}
+function track(s){return `<div class="track">${STEPS.map((x,i)=>`<span class="${i<=s?'d':''}">${x}</span>`).join('')}</div>`}
+function orders(){
+ const os=API.orders(S.user),adm=S.user.role==='admin';
+ return `<h2 style="margin-bottom:14px">${adm?'All orders':'Your orders'}</h2>`+(os.length?os.map(o=>`<div class="panel"><div class="row" style="margin:0;padding:0"><b>#${o.id}</b><span class="mute">${o.date}${adm?' · '+esc(o.user):''}</span></div>${track(o.status)}<p class="mute" style="margin:4px 0">${o.items.map(i=>i.emoji+' '+esc(i.name)+' × '+i.q).join(', ')}</p><div class="row"><b>${inr(o.total)}</b>${adm?`<select style="width:auto" onchange="API.setStatus(S.user,'${o.id}',this.value);render();toast('Status updated')" aria-label="Order status">${STEPS.map((x,i)=>`<option value="${i}" ${i===o.status?'selected':''}>${x}</option>`).join('')}</select>`:`<span class="mute">Ship to: ${esc(o.info.city)}</span>`}</div></div>`).join(''):'<p class="empty">No orders yet. Your first order will show up here.</p>');
+}
+function admin(){
+ const ps=API.products(),os=API.orders(S.user);
+ return `<h2 style="margin-bottom:14px">Admin dashboard</h2>
+ <div class="stats"><div><span class="mute">Revenue</span><b>${inr(os.reduce((s,o)=>s+o.total,0))}</b></div><div><span class="mute">Orders</span><b>${os.length}</b></div><div><span class="mute">Products</span><b>${ps.length}</b></div></div>
+ <div class="panel"><h3 id="ft" style="margin-bottom:10px">Add a product</h3><div class="form"><input type="hidden" id="pid">
+ <div><label for="pn">Name</label><input id="pn"></div><div><label for="pp">Price (₹)</label><input id="pp" type="number" min="1"></div>
+ <div><label for="ps">Stock</label><input id="ps" type="number" min="0"></div><div><label for="pc">Category</label><input id="pc" placeholder="Indoor"></div>
+ <div><label for="pe">Emoji</label><input id="pe" value="🌿" maxlength="4"></div><button class="btn" onclick="saveP()">Save product</button></div><p class="err" id="perr"></p></div>
+ <div class="panel scroll"><table><tr><th>Product</th><th>Price</th><th>Stock</th><th></th></tr>${ps.map(p=>`<tr><td>${p.emoji} ${esc(p.name)}</td><td>${inr(p.price)}</td><td>${p.stock}</td><td style="white-space:nowrap"><button class="btn alt sm" onclick="editP(${p.id})">Edit</button> <button class="btn red sm" onclick="delP(${p.id})">Delete</button></td></tr>`).join('')}</table></div>`;
+}
+function saveP(){
+ const g=i=>$('#'+i).value,n=g('pn').trim(),p=+g('pp'),s=+g('ps');
+ if(!n||!(p>0)||s<0||isNaN(s)||!g('pc').trim()){$('#perr').textContent='Fill in name, price, stock and category.';return}
+ try{API.saveProduct(S.user,{id:+g('pid')||undefined,name:n,price:p,stock:s,cat:g('pc').trim(),emoji:g('pe')||'🌿'});toast('Product saved');render()}catch(e){$('#perr').textContent=e.message}
+}
+function editP(id){const p=API.products().find(x=>x.id===id);pid.value=id;pn.value=p.name;pp.value=p.price;ps.value=p.stock;pc.value=p.cat;pe.value=p.emoji;ft.textContent='Edit product';pn.focus()}
+function delP(id){if(confirm('Delete this product?')){API.deleteProduct(S.user,id);render()}}
+
+// ---------- Cart & checkout ----------
+function add(id){const p=API.products().find(x=>x.id===id),c=S.cart.find(x=>x.id===id);
+ if((c?c.q:0)>=p.stock){toast('No more stock available');return}
+ c?c.q++:S.cart.push({id,q:1});saveCart();render();toast(p.name+' added')}
+function chg(id,d){const c=S.cart.find(x=>x.id===id),p=API.products().find(x=>x.id===id);c.q+=d;if(c.q>p.stock)c.q=p.stock;if(c.q<1)S.cart=S.cart.filter(x=>x.id!==id);saveCart();render();cartM()}
+function cartM(){
+ const ps=API.products();S.cart=S.cart.filter(c=>ps.some(p=>p.id===c.id));
+ const rows=S.cart.map(c=>({...ps.find(p=>p.id===c.id),q:c.q})),tot=rows.reduce((s,r)=>s+r.price*r.q,0);
+ modal(`<h2>Your cart</h2>`+(rows.length?rows.map(r=>`<div class="line"><span class="e">${r.emoji}</span><div class="t"><b>${esc(r.name)}</b><div class="mute">${inr(r.price)}</div></div><div class="qty"><button onclick="chg(${r.id},-1)" aria-label="Less">−</button> ${r.q} <button onclick="chg(${r.id},1)" aria-label="More">+</button></div></div>`).join('')+
+  `<div class="row" style="padding:16px 0"><b>Total</b><b class="price">${inr(tot)}</b></div><button class="btn" style="width:100%" onclick="checkoutM()">Go to checkout</button>`:'<p class="empty">Your cart is empty. Add a plant to get started.</p>')+
+  `<button class="btn alt" style="width:100%;margin-top:10px" onclick="closeM()">Keep shopping</button>`,true);
+}
+function checkoutM(){
+ if(!S.user){authM('Log in to place your order.');return}
+ const tot=S.cart.reduce((s,c)=>s+API.products().find(p=>p.id===c.id).price*c.q,0);
+ modal(`<h2>Checkout · ${inr(tot)}</h2><div class="f"><div><label for="cn">Full name</label><input id="cn" value="${esc(S.user.name)}"></div><div><label for="ca">Address</label><input id="ca"></div><div><label for="cc">City</label><input id="cc"></div><div><label for="cp">Phone</label><input id="cp" type="tel"></div>
+ <p class="hint">Payment is cash on delivery in this demo.</p><p class="err" id="cerr"></p><button class="btn" onclick="placeO()">Place order</button><button class="btn alt" onclick="cartM()">Back to cart</button></div>`);
+}
+function placeO(){
+ const v=i=>$('#'+i).value.trim();
+ if(!v('cn')||!v('ca')||!v('cc')||v('cp').replace(/\D/g,'').length<8){$('#cerr').textContent='Fill in every field with a valid phone number.';return}
+ try{const o=API.placeOrder(S.user,S.cart,{name:v('cn'),addr:v('ca'),city:v('cc'),phone:v('cp')});S.cart=[];saveCart();S.view='orders';render();
+  modal(`<h2>Order placed 🎉</h2><p>Your order <b>#${o.id}</b> for ${inr(o.total)} is confirmed. Follow it under My orders.</p><button class="btn" style="width:100%" onclick="closeM()">Done</button>`)
+ }catch(e){$('#cerr').textContent=e.message}
+}
+
+// ---------- Auth ----------
+function authM(msg,reg){
+ modal(`<h2>${reg?'Create account':'Log in'}</h2><div class="f">${msg?`<p class="mute">${esc(msg)}</p>`:''}
+ ${reg?`<div><label for="an">Name</label><input id="an"></div>`:''}<div><label for="ae">Email</label><input id="ae" type="email"></div><div><label for="aw">Password</label><input id="aw" type="password"></div>
+ <p class="err" id="aerr"></p><button class="btn" onclick="${reg?'doReg()':'doLogin()'}">${reg?'Create account':'Log in'}</button>
+ <button class="btn alt" onclick="authM(null,${!reg})">${reg?'I already have an account':'Create a new account'}</button>
+ ${reg?'':'<p class="hint">Try admin: admin@leafy.com / admin123<br>Try user: user@leafy.com / user123</p>'}</div>`);
+}
+function done(u){S.user=u;db.set('session',u);closeM();render();toast('Welcome, '+u.name.split(' ')[0])}
+function doLogin(){try{done(API.login($('#ae').value,$('#aw').value))}catch(e){$('#aerr').textContent=e.message}}
+function doReg(){try{done(API.register($('#an').value,$('#ae').value,$('#aw').value))}catch(e){$('#aerr').textContent=e.message}}
+function logout(){S.user=null;db.set('session',null);S.view='shop';render();toast('Logged out')}
+render();
+</script>
+</body>
+</html>
